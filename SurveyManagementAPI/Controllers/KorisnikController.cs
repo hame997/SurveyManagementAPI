@@ -18,6 +18,7 @@ public class KorisniciController : ControllerBase
 
     // GET: api/Korisnici
     [HttpGet]
+    [Authorize(Roles = "administrator")] // Samo administratori mogu dohvatiti sve korisnike
     public async Task<ActionResult<IEnumerable<Korisnik>>> GetKorisnici()
     {
         return await _context.Korisnici.ToListAsync();
@@ -25,6 +26,7 @@ public class KorisniciController : ControllerBase
 
     // GET: api/Korisnici/5
     [HttpGet("{id}")]
+    [Authorize(Roles = "administrator,default")] // Svi korisnici mogu dohvatiti pojedinačnog korisnika
     public async Task<ActionResult<Korisnik>> GetKorisnik(int id)
     {
         var korisnik = await _context.Korisnici.FindAsync(id);
@@ -39,6 +41,7 @@ public class KorisniciController : ControllerBase
 
     // PUT: api/Korisnici/5
     [HttpPut("{id}")]
+    [Authorize(Roles = "administrator")] // Samo administratori mogu ažurirati korisnike
     public async Task<IActionResult> PutKorisnik(int id, Korisnik korisnik)
     {
         if (id != korisnik.Id)
@@ -69,6 +72,7 @@ public class KorisniciController : ControllerBase
 
     // POST: api/Korisnici
     [HttpPost]
+    [AllowAnonymous] // POST operacija ne zahtijeva autentifikaciju
     public async Task<ActionResult<Korisnik>> PostKorisnik(Korisnik korisnik)
     {
         _context.Korisnici.Add(korisnik);
@@ -79,6 +83,7 @@ public class KorisniciController : ControllerBase
 
     // DELETE: api/Korisnici/5
     [HttpDelete("{id}")]
+    [Authorize(Roles = "administrator")] // Samo administratori mogu brisati korisnike
     public async Task<IActionResult> DeleteKorisnik(int id)
     {
         var korisnik = await _context.Korisnici.FindAsync(id);
