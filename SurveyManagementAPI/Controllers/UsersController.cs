@@ -7,49 +7,49 @@ using System.Threading.Tasks;
 
 [Route("api/[controller]")]
 [ApiController]
-public class KorisniciController : ControllerBase
+public class UsersController : ControllerBase
 {
     private readonly MojDbContext _context;
 
-    public KorisniciController(MojDbContext context)
+    public UsersController(MojDbContext context)
     {
         _context = context;
     }
 
-    // GET: api/Korisnici
+    // GET: api/Users
     [HttpGet]
     [Authorize(Roles = "administrator")] // Samo administratori mogu dohvatiti sve korisnike
-    public async Task<ActionResult<IEnumerable<Korisnik>>> GetKorisnici()
+    public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
     {
-        return await _context.Korisnici.ToListAsync();
+        return await _context.Users.ToListAsync();
     }
 
-    // GET: api/Korisnici/5
+    // GET: api/Users/5
     [HttpGet("{id}")]
     [Authorize(Roles = "administrator,default")] // Svi korisnici mogu dohvatiti pojedinačnog korisnika
-    public async Task<ActionResult<Korisnik>> GetKorisnik(int id)
+    public async Task<ActionResult<Users>> GetUser(int id)
     {
-        var korisnik = await _context.Korisnici.FindAsync(id);
+        var user = await _context.Users.FindAsync(id);
 
-        if (korisnik == null)
+        if (user == null)
         {
             return NotFound();
         }
 
-        return korisnik;
+        return user;
     }
 
-    // PUT: api/Korisnici/5
+    // PUT: api/Users/5
     [HttpPut("{id}")]
     [Authorize(Roles = "administrator")] // Samo administratori mogu ažurirati korisnike
-    public async Task<IActionResult> PutKorisnik(int id, Korisnik korisnik)
+    public async Task<IActionResult> PutUser(int id, Users user)
     {
-        if (id != korisnik.Id)
+        if (id != user.Id)
         {
             return BadRequest();
         }
 
-        _context.Entry(korisnik).State = EntityState.Modified;
+        _context.Entry(user).State = EntityState.Modified;
 
         try
         {
@@ -57,7 +57,7 @@ public class KorisniciController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!KorisnikExists(id))
+            if (!UserExists(id))
             {
                 return NotFound();
             }
@@ -70,36 +70,36 @@ public class KorisniciController : ControllerBase
         return NoContent();
     }
 
-    // POST: api/Korisnici
+    // POST: api/Users
     [HttpPost]
     [AllowAnonymous] // POST operacija ne zahtijeva autentifikaciju
-    public async Task<ActionResult<Korisnik>> PostKorisnik(Korisnik korisnik)
+    public async Task<ActionResult<Users>> PostUser(Users user)
     {
-        _context.Korisnici.Add(korisnik);
+        _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetKorisnik", new { id = korisnik.Id }, korisnik);
+        return CreatedAtAction("GetUser", new { id = user.Id }, user);
     }
 
-    // DELETE: api/Korisnici/5
+    // DELETE: api/Users/5
     [HttpDelete("{id}")]
     [Authorize(Roles = "administrator")] // Samo administratori mogu brisati korisnike
-    public async Task<IActionResult> DeleteKorisnik(int id)
+    public async Task<IActionResult> DeleteUser(int id)
     {
-        var korisnik = await _context.Korisnici.FindAsync(id);
-        if (korisnik == null)
+        var user = await _context.Users.FindAsync(id);
+        if (user == null)
         {
             return NotFound();
         }
 
-        _context.Korisnici.Remove(korisnik);
+        _context.Users.Remove(user);
         await _context.SaveChangesAsync();
 
         return NoContent();
     }
 
-    private bool KorisnikExists(int id)
+    private bool UserExists(int id)
     {
-        return _context.Korisnici.Any(e => e.Id == id);
+        return _context.Users.Any(e => e.Id == id);
     }
 }
