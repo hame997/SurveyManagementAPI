@@ -4,6 +4,7 @@ public class MojDbContext : DbContext
 {
     public DbSet<Survey> Surveys { get; set; } // Dodajte DbSet za entitet Survey
     public DbSet<Users> Users { get; set; } // Dodajte DbSet za svaki entitet koji želite mapirati u bazu podataka
+    public DbSet<SurveyResponse> SurveyResponses { get; set; } // Dodajte DbSet za entitet SurveyResponse
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
