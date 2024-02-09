@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using Dapper;
+using Npgsql;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -95,6 +97,13 @@ todosApi.MapGet("/{id}", (int id) =>
     sampleTodos.FirstOrDefault(a => a.Id == id) is { } todo
         ? Results.Ok(todo)
         : Results.NotFound());
+
+
+// Učitavanje connection string-a iz appsettings.json
+string connectionString = builder.Configuration.GetConnectionString("MyPostgresConnection");
+
+// Inicijalizacija baze podataka
+DatabaseInitializer.Initialize(connectionString);
 
 app.Run();
 
